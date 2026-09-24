@@ -31,6 +31,40 @@ function name, address, callers/callees. Note: the IDA FLIRT analysis swapped
 `@Sin`/`@Cos` names globally — this is a known critical porting detail, not
 an extraction bug.
 
+## Implementation language
+
+The original binary was written in **Turbo Pascal** (Borland, 16-bit MS-DOS),
+targeting 8086/8088 real-mode DOS. The port reproduces its behavior in modern
+C++20 — no original source was ever available; everything was recovered from the
+disassembly. Key language/runtime artifacts recovered from `STAR.EXE.asm`:
+
+- **Real48** — Borland's 6-byte extended-precision floating point (40-bit
+  effective mantissa, exponent bias 128, mantissa = 0.5 + last-byte/256 for
+  `SI=0` constants). Round-half-even per operation. The `real48.py` decoder
+  in `scripts/` validates exact real48 decode on canonical constants
+  (1.0, 2.0, 3.0, 6.0, 60.0, 120.0, 5.5, 12.0, 30.0, 100.0, 365.25,
+  30.6001, 1720994.5, 24110.54541, 8640184.812866). Returned in `AX:BX:DX`,
+  compared as `AX:BX:DX` vs `CX:SI:DI` via `@__Cmp$q4Realt1`.
+- **ShortString** — Pascal length-prefixed strings (1-byte length + chars),
+  all 11-byte city/label tables and the 27-entry YONI/RUXHA arrays are inline
+  literals in the code segment. 400 ShortStrings were recovered.
+- **Runtime calls** (visible in the disassembly call census):
+  - Arithmetic: `@$brmul`, `@$brdiv`, `@$brplu`, `@$brmin` (Real48 ops)
+  - Conversions: `@Real$q7Longint`, `@Int`, `@Trunc`, `@Round`, `@Frac`
+  - Trig: `@Sin`, `@Cos`, `@ArcTan`, `@Sqrt`, `@Exp`
+  - Output: `@WriteLn`, `@Write`, `GOTOXY` (CRT unit)
+  - Input: `ReadKey`, `UpCase`, `Read Longint`, `Read Real`
+- **Critical porting detail**: the IDA FLIRT analysis swapped `@Sin`→cosine
+  and `@Cos`→sine globally. The `sub_220B3` ephemeris census (21 Sin / 25 Cos
+  call sites) only closes to <0.7" on 13 bodies when read under this swap.
+  The export-for-AI `AGENTS.md` substitution mandate assumes a direct mapping
+  (it does **not**) — empirical evidence rules.
+
+The port maps these to standard `<cmath>` / `<iostream>` / `<string>`
+equivalents at the engine seam (`src/Engine.hpp`), keeping the Real48 constants
+bit-exact where they matter (JD path, sunrise mechanism) and double-precision
+everywhere else (sub-arcsecond residuals are documented, not silent).
+
 ## What the reverse-engineering recovered
 
 The original binary computes Sri Lankan Vedic horoscopes with these proven
@@ -61,7 +95,8 @@ Pascal `ShortString` literals in the code segment, length-prefixed and labeled
 by IDA. 400 strings were recovered by `extract_strings.py` /
 `real48.py`. All 11-byte city/label tables, 27 YONI/RUXHA attribute tables,
 yoga/karana/tithi/amsha names, and the 165-function disassembly are present in
-the asm.
+the asm. See **Implementation Language** above for the Real48/ShortString/Turbo
+Pascal runtime mapping.
 
 ## Deliberately reproduced quirks (fidelity contract)
 

@@ -31,6 +31,21 @@ function name, address, callers/callees. Note: the IDA FLIRT analysis swapped
 `@Sin`/`@Cos` names globally — this is a known critical porting detail, not
 an extraction bug.
 
+### Running the original
+
+To run the actual DOS binary (e.g. for side-by-side comparison against the
+modern port), use [DOSBox-X](https://github.com/joncampbell123/dosbox-x) with
+the archived copy here:
+
+```bash
+dosbox-x STAR.EXE
+```
+
+No configuration is needed — the binary is self-contained (Turbo Pascal
+runtime linked in). For automated capture runs (differential fuzzing,
+golden-file re-baselining), the main port's `tools/` directory drives DOSBox-X
+headlessly against this file.
+
 ## Implementation language
 
 The original binary was written in **Turbo Pascal** (Borland, 16-bit MS-DOS),

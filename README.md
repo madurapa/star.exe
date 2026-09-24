@@ -27,15 +27,15 @@ screens reproduce this exact flow.
 | Path | Contents |
 |---|---|
 | `STAR.EXE` | The 16-bit DOS binary. Run via [DOSBox-X](https://github.com/joncampbell123/dosbox-x): `dosbox-x STAR.EXE` |
-| `STAR.EXE.i64`, `STAR.EXE.idc` | IDA Pro database artifacts |
-| `STAR.EXE.asm` | Full disassembly (67,917 lines, base `1000h`, entry `1000:A46`) |
+| `STAR.EXE.i64`, `STAR.EXE.idc` | [IDA Pro](https://hex-rays.com/ida-pro/) database artifacts |
+| `STAR.EXE.asm` | Full disassembly (67,917 lines, base `1000h`, entry `1000:A46`), produced by IDA Pro 7.x |
 | `full_analysis_listing.asm` | Publics/symbols map only |
 | `binary_blueprint.json` | Extracted string/layout blueprint (352 strings, 32 routines) |
 | `STAR.EXE_export_for_ai/` | IDA Export for AI: one `.asm` per failed decompilation, `function_index.txt`, `strings.txt`, `imports.txt`, `exports.txt`, `pointers.txt`, `memory/` hexdumps |
 | `scripts/` | One-shot extraction harnesses: `extract_all.py`, `dump_*.py`, `r2_stage*.py`, `expB.py`/`expC.py` (DOSBox drivers), `extract_strings.py`, `real48.py` (Real48 decoder) |
 | `r2_out/` | Unreferenced radare2 output |
 
-The IDA Export (`STAR.EXE_export_for_ai/AGENTS.md`) documents 165 functions in
+The IDA Pro export (`STAR.EXE_export_for_ai/AGENTS.md`) documents 165 functions in
 **legacy mode** (single file per function), with metadata headers recording
 function name, address, callers/callees. Note: the IDA FLIRT analysis swapped
 `@Sin`/`@Cos` names globally — this is a known critical porting detail, not
@@ -168,8 +168,29 @@ This table summarizes the relationship:
 
 The re-baselining rule: golden files change **only** by explicit re-baselining
 with recorded justification. Never edit expectations to match new code. If
-disassembly is ever needed again, use free tooling (Ghidra/radare2) — the
+disassembly is ever needed again, use free tooling (Ghidra or radare2) — the
 proprietary tools that produced this archive have no place in the pipeline.
+
+## Tools used
+
+| Tool | Purpose | Link |
+|---|---|---|
+| [IDA Pro](https://hex-rays.com/ida-pro/) 7.x | Disassembly + FLIRT analysis → `STAR.EXE.asm`, `.i64`, `.idc`, `STAR.EXE_export_for_ai/` | https://hex-rays.com/ida-pro |
+| [radare2](https://rada.re/n/) 5.9.8 + `r2pipe` | Supplementary function/string inventory, byte-level search for the Real→string pipeline (`scripts/r2_stage*.py`) | https://rada.re/n |
+| [DOSBox-X](https://github.com/joncampbell123/dosbox-x) | Running the DOS binary for screen capture; scripted via `dosbox-automation` 0.85.1 for live-memory probing | https://github.com/joncampbell123/dosbox-x |
+| [Python](https://python.org/) 3.8 | Extraction scripts (`scripts/*.py`): `extract_strings.py`, `real48.py`, `dump_*.py`, `expB.py`/`expC.py` | https://python.org |
+
+- **IDA Pro** is the proprietary tool that produced the full disassembly,
+  function index, string table, and memory hexdumps. Its FLIRT analysis
+  swapped `@Sin`/`@Cos` globally — the single most important porting detail
+  in this archive (see **Implementation language**).
+- **radare2** was used for targeted byte-search and scriptable disassembly of
+  the Borland Real→string print pipeline (rounder at `0x16FCF`, producer at
+  `0x170C7`, scaler at `0x1723C`). `r2_out/` holds leftover output.
+- **Ghidra** was **not** used for this archive. It is listed in the port's
+  [AGENTS.md](https://github.com/madurapa/star-horoscope/blob/main/AGENTS.md)
+  as the recommended free alternative for any future disassembly need (IDA Pro
+  is proprietary; Ghidra and radare2 are both free).
 
 ## License
 

@@ -11,6 +11,17 @@ port at `../STAR/` (or `git@github.com:madurapa/star.exe.git`). It exists for
 provenance and arbitration only — a reference copy of the original binary and
 the extractions that drove the port.
 
+### Start screen
+
+The program's opening screen (the first thing shown when you run `STAR.EXE`
+in DOSBox-X):
+
+![STAR.EXE start screen — Sri Lankan Vedic horoscope input prompt](start-screen.png)
+
+The original greets with a full input form — name, birth date/time, city
+selector, and a `S`/`N` prompt for Sidhanta/Nirayana mode. All 19 subsequent
+screens reproduce this exact flow.
+
 ## What lives here
 
 | Path | Contents |
@@ -41,10 +52,10 @@ the archived copy here:
 dosbox-x STAR.EXE
 ```
 
-No configuration is needed — the binary is self-contained (Turbo Pascal
-runtime linked in). For automated capture runs (differential fuzzing,
-golden-file re-baselining), the main port's `tools/` directory drives DOSBox-X
-headlessly against this file.
+See `start-screen.png` above for the opening screen. No configuration is
+needed — the binary is self-contained (Turbo Pascal runtime linked in). For
+automated capture runs (differential fuzzing, golden-file re-baselining), the
+main port's `tools/` directory drives DOSBox-X headlessly against this file.
 
 ## Implementation language
 

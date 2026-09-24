@@ -183,23 +183,3 @@ proprietary tools that produced this archive have no place in the pipeline.
 
 The original binary is unlicensed freeware (abandonware). This archive is
 preserved for reference.
-
-## Provenance (summary)
-
-STAR.EXE is an independent reconstruction of a 16-bit MS-DOS Sri Lankan Vedic
-astrology program whose original author is unknown and whose source was never
-available. The program was freely distributed in Sri Lanka and fell out of use
-only because modern operating systems can no longer run 16-bit DOS binaries.
-
-This codebase was built by black-box analysis of the program's own screen
-captures (8 DOS runs via DOSBox-X, 106-case differential fuzzing matrix)
-combined with static disassembly of the binary (IDA Pro 67,917-line
-`STAR.EXE.asm`, 165 functions), to restore free public access to functionality
-otherwise lost to 16-bit obsolescence. It is not a copy of any original source
-(none exists), makes no claim of authorship over the original program, and is
-not a commercial product.
-
-A third-party component is vendored in the modern port: **Swiss Ephemeris
-v2.10.3final** (Dieter Koch & Alois Treindl, Astrodienst AG, AGPL, see
-`../STAR/third_party/swisseph/LICENSE`). Full provenance statement lives in
-`../STAR/NOTICE.md`.

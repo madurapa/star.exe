@@ -33,7 +33,6 @@ screens reproduce this exact flow.
 | `binary_blueprint.json` | Extracted string/layout blueprint (352 strings, 32 routines) |
 | `STAR.EXE_export_for_ai/` | IDA Export for AI: one `.asm` per failed decompilation, `function_index.txt`, `strings.txt`, `imports.txt`, `exports.txt`, `pointers.txt`, `memory/` hexdumps |
 | `scripts/` | One-shot extraction harnesses: `extract_all.py`, `dump_*.py`, `r2_stage*.py`, `expB.py`/`expC.py` (DOSBox drivers), `extract_strings.py`, `real48.py` (Real48 decoder) |
-| `suggestion/` | Contemporary analysis notes and proposals |
 | `r2_out/` | Unreferenced radare2 output |
 
 The IDA Export (`STAR.EXE_export_for_ai/AGENTS.md`) documents 165 functions in

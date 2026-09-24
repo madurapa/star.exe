@@ -166,6 +166,9 @@ fuzzing (106-case matrix).
 
 ## Relationship to the modern port
 
+The modern port lives at [github.com/madurapa/star-horoscope](https://github.com/madurapa/star-horoscope)
+(`../STAR/` locally). This table summarizes the relationship:
+
 | Aspect | This archive | `../STAR/` (the port) |
 |---|---|---|
 | Role | Frozen extraction debris + original binary | Active C++ console app |

@@ -7,9 +7,9 @@ and fell out of use only because modern operating systems can no longer run
 16-bit DOS binaries.
 
 This archive is **not built, not tested, and not re-linked** into the modern
-port at `../STAR/` (or `git@github.com:madurapa/star.exe.git`). It exists for
-provenance and arbitration only — a reference copy of the original binary and
-the extractions that drove the port.
+port at [github.com/madurapa/star-horoscope](https://github.com/madurapa/star-horoscope).
+It exists for provenance and arbitration only — a reference copy of the
+original binary and the extractions that drove the port.
 
 ### Start screen
 
@@ -126,8 +126,9 @@ Pascal runtime mapping.
 ## Deliberately reproduced quirks (fidelity contract)
 
 The modern port reproduces these binary-literal behaviors (documented in
-`../STAR/docs/quirks.md`). They are not bugs in this port; they are the
-contract — changing a number breaks the golden-file gate.
+[`docs/quirks.md`](https://github.com/madurapa/star-horoscope/blob/main/docs/quirks.md)).
+They are not bugs in this port; they are the contract — changing a number
+breaks the golden-file gate.
 
 - **Non-carry seconds**: degrees split without carrying seconds into minutes
   (e.g. Shani `213:52:60`). Lagna never wraps down; negatives wrap up via
@@ -152,30 +153,18 @@ contract — changing a number breaks the golden-file gate.
   typo for 24); Siyavsa yields a blank Linga.
 - **Misplaced fixed karanas**: the dispatch table deviates from textbooks.
 
-## Baseline checkpoints
-
-Profile: **Test User**, 1981-12-08 12:55, Ratnapura (city 7), Nirayana.
-Verified longitudes — Lagna 334:50:42, Chandra(Moon) 9:23:49, Ravi(Sun)
-232:33:32, Budha 231:17:00, Sikuru 276:02:26, Kuja 152:42:30, Guru 188:32:33,
-Shani 176:32:50, Raahu 90:52:13, Kethu 270:52:13. JD 2444946.809, Ayanamsa
-23°34'21". Dasa opens Ketu Maha 2-0-23.
-
-The modern port pins these with automated screen-diff harnesses
-(`../STAR/tests/verifier.cpp`, 83+ assertions) and differential + boundary
-fuzzing (106-case matrix).
-
 ## Relationship to the modern port
 
-The modern port lives at [github.com/madurapa/star-horoscope](https://github.com/madurapa/star-horoscope)
-(`../STAR/` locally). This table summarizes the relationship:
+The modern port lives at [github.com/madurapa/star-horoscope](https://github.com/madurapa/star-horoscope).
+This table summarizes the relationship:
 
-| Aspect | This archive | `../STAR/` (the port) |
+| Aspect | This archive | [star-horoscope](https://github.com/madurapa/star-horoscope) (the port) |
 |---|---|---|
 | Role | Frozen extraction debris + original binary | Active C++ console app |
 | Build status | Never compiled, never re-linked | Builds with CMake; `--verify` → `VERIFY_ALL_GREEN` |
 | Ground truth source | Original DOS binary via DOSBox captures | Golden screen files (`tests/screens/`) |
 | Extraction tooling | `scripts/*.py` (run once, kept for record) | `tools/check_extraction.py` only consumer (reads asm text) |
-| Quirk handling | Binary-literal reference | Deliberately reproduced; documented in `docs/quirks.md` |
+| Quirk handling | Binary-literal reference | [Deliberately reproduced](https://github.com/madurapa/star-horoscope/blob/main/docs/quirks.md) |
 
 The re-baselining rule: golden files change **only** by explicit re-baselining
 with recorded justification. Never edit expectations to match new code. If
